@@ -83,6 +83,7 @@ async function buildExecutor(options, context) {
 }
 exports.default = buildExecutor;
 function updatePackageJson(packageJson, context) {
+    const projectRoot = context.projectGraph.nodes[context.projectName].data.root;
     if (!packageJson.scripts) {
         packageJson.scripts = {};
     }
@@ -92,7 +93,7 @@ function updatePackageJson(packageJson, context) {
     packageJson.dependencies ??= {};
     // These are always required for a production Remix app to run.
     const requiredPackages = ['react', 'react-dom', 'isbot', '@remix-run/node'];
-    const bundlerType = (0, versions_1.getBunlderType)(context.root);
+    const bundlerType = (0, versions_1.getBunlderType)(projectRoot);
     if (bundlerType === 'classic') {
         // These packages seem to be required for the older Remix version
         // However, newer Vite version does not need them
