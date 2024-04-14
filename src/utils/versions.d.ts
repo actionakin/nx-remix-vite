@@ -14,3 +14,8 @@ export declare const testingLibraryJestDomVersion = "^6.2.0";
 export declare const testingLibraryUserEventsVersion = "^14.5.2";
 export declare function getRemixVersion(tree: Tree): string;
 export declare function getPackageVersion(tree: Tree, packageName: string): any;
+/**
+ * Infer bundler type depending on vite.config.ts presence
+ * @param root workspace root path
+ */
+export declare function getBunlderType(root: string): 'classic' | 'vite';

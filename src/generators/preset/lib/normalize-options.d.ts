@@ -2,7 +2,7 @@ import { Tree } from '@nx/devkit';
 import { RemixGeneratorSchema } from '../schema';
 export interface NormalizedSchema extends RemixGeneratorSchema {
     appName: string;
-    version?: 'classic' | 'vite';
+    bundler?: 'classic' | 'vite';
     projectRoot: string;
     parsedTags: string[];
     unitTestRunner?: 'jest' | 'none' | 'vitest';

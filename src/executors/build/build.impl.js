@@ -6,6 +6,7 @@ const fileutils_1 = require("@nx/workspace/src/utilities/fileutils");
 const child_process_1 = require("child_process");
 const fs_extra_1 = require("fs-extra");
 const path_1 = require("path");
+const versions_1 = require("../../utils/versions");
 function buildRemixBuildArgs(options) {
     const args = ['vite:build'];
     if (options.sourcemap) {
@@ -90,16 +91,18 @@ function updatePackageJson(packageJson, context) {
     }
     packageJson.dependencies ??= {};
     // These are always required for a production Remix app to run.
-    const requiredPackages = [
-        'react',
-        'react-dom',
-        'isbot',
-        '@remix-run/css-bundle',
-        '@remix-run/node',
-        '@remix-run/react',
-        '@remix-run/serve',
-        '@remix-run/dev',
-    ];
+    const requiredPackages = ['react', 'react-dom', 'isbot', '@remix-run/node'];
+    const bundlerType = (0, versions_1.getBunlderType)(context.root);
+    if (bundlerType === 'classic') {
+        // These packages seem to be required for the older Remix version
+        // However, newer Vite version does not need them
+        requiredPackages.push(...[
+            '@remix-run/css-bundle',
+            '@remix-run/react',
+            '@remix-run/serve',
+            '@remix-run/dev',
+        ]);
+    }
     for (const pkg of requiredPackages) {
         const externalNode = context.projectGraph.externalNodes[`npm:${pkg}`];
         if (externalNode) {

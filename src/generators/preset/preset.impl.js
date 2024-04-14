@@ -15,7 +15,7 @@ async function default_1(tree, _options) {
         nxJson.useInferencePlugins !== false;
     const appGenTask = await (0, application_impl_1.default)(tree, {
         name: options.appName,
-        version: options.version ?? 'vite',
+        bundler: options.bundler ?? 'vite',
         tags: options.tags,
         skipFormat: true,
         rootProject: true,
