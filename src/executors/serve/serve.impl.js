@@ -5,7 +5,7 @@ const async_iterable_1 = require("@nx/devkit/src/utils/async-iterable");
 const wait_for_port_open_1 = require("@nx/web/src/utils/wait-for-port-open");
 const node_child_process_1 = require("node:child_process");
 const node_path_1 = require("node:path");
-const versions_1 = require("../../utils/versions");
+const vite_config_1 = require("../../utils/vite-config");
 function normalizeOptions(schema) {
     return {
         ...schema,
@@ -47,7 +47,7 @@ async function* serveExecutor(schema, context) {
         ? process.env.NODE_ENV
         : 'development';
     process.env.PORT = `${options.port}`;
-    const bundlerType = (0, versions_1.getBunlderType)(projectRoot);
+    const bundlerType = await (0, vite_config_1.getBunlderType)(projectRoot);
     const serveTargetName = bundlerType === 'vite' ? 'vite:dev' : 'dev';
     yield* (0, async_iterable_1.createAsyncIterable)(async ({ done, next, error }) => {
         const server = (0, node_child_process_1.fork)(remixBin, [serveTargetName, ...args], {

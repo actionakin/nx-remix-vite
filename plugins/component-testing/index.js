@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.nxComponentTestingPreset = void 0;
 const cypress_preset_1 = require("@nx/cypress/plugins/cypress-preset");
 const devkit_1 = require("@nx/devkit");
-const fs_1 = require("fs");
+const vite_config_1 = require("../../src/utils/vite-config");
 const path_1 = require("path");
 /**
  * Remix nx preset for Cypress Component Testing
@@ -32,7 +32,7 @@ function nxComponentTestingPreset(pathToConfig) {
         devServer: {
             ...{ framework: 'react', bundler: 'vite' },
             viteConfig: async () => {
-                const viteConfigPath = findViteConfig(normalizedProjectRootPath);
+                const viteConfigPath = (0, vite_config_1.findViteConfig)(normalizedProjectRootPath);
                 const { mergeConfig, loadConfigFromFile, searchForWorkspaceRoot } = await Promise.resolve().then(() => require('vite'));
                 const resolved = await loadConfigFromFile({
                     mode: 'watch',
@@ -54,11 +54,3 @@ function nxComponentTestingPreset(pathToConfig) {
     };
 }
 exports.nxComponentTestingPreset = nxComponentTestingPreset;
-function findViteConfig(projectRootFullPath) {
-    const allowsExt = ['js', 'mjs', 'ts', 'cjs', 'mts', 'cts'];
-    for (const ext of allowsExt) {
-        if ((0, fs_1.existsSync)((0, path_1.join)(projectRootFullPath, `vite.config.${ext}`))) {
-            return (0, path_1.join)(projectRootFullPath, `vite.config.${ext}`);
-        }
-    }
-}

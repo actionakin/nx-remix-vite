@@ -6,10 +6,10 @@ const fileutils_1 = require("@nx/workspace/src/utilities/fileutils");
 const child_process_1 = require("child_process");
 const fs_extra_1 = require("fs-extra");
 const path_1 = require("path");
-const versions_1 = require("../../utils/versions");
-function buildRemixBuildArgs(options, context) {
+const vite_config_1 = require("../../utils/vite-config");
+async function buildRemixBuildArgs(options, context) {
     const projectRoot = context.projectGraph.nodes[context.projectName].data.root;
-    const bundlerType = (0, versions_1.getBunlderType)(projectRoot);
+    const bundlerType = await (0, vite_config_1.getBunlderType)(projectRoot);
     const buildTargetName = bundlerType === 'vite' ? 'vite:build' : 'build';
     const args = [buildTargetName];
     if (options.sourcemap) {
@@ -19,9 +19,9 @@ function buildRemixBuildArgs(options, context) {
 }
 async function runBuild(options, context) {
     const projectRoot = context.projectGraph.nodes[context.projectName].data.root;
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const remixBin = require.resolve('@remix-run/dev/dist/cli');
-        const args = buildRemixBuildArgs(options, context);
+        const args = await buildRemixBuildArgs(options, context);
         const p = (0, child_process_1.fork)(remixBin, args, {
             cwd: (0, path_1.join)(context.root, projectRoot),
             stdio: 'inherit',
@@ -59,7 +59,7 @@ async function buildExecutor(options, context) {
         if (!packageJson.scripts.start) {
             packageJson.scripts['start'] = 'remix-serve ./build/index.js';
         }
-        updatePackageJson(packageJson, context);
+        await updatePackageJson(packageJson, context);
         (0, devkit_1.writeJsonFile)(`${options.outputPath}/package.json`, packageJson);
     }
     else {
@@ -85,7 +85,7 @@ async function buildExecutor(options, context) {
     return { success: true };
 }
 exports.default = buildExecutor;
-function updatePackageJson(packageJson, context) {
+async function updatePackageJson(packageJson, context) {
     const projectRoot = context.projectGraph.nodes[context.projectName].data.root;
     if (!packageJson.scripts) {
         packageJson.scripts = {};
@@ -96,7 +96,7 @@ function updatePackageJson(packageJson, context) {
     packageJson.dependencies ??= {};
     // These are always required for a production Remix app to run.
     const requiredPackages = ['react', 'react-dom', 'isbot', '@remix-run/node'];
-    const bundlerType = (0, versions_1.getBunlderType)(projectRoot);
+    const bundlerType = await (0, vite_config_1.getBunlderType)(projectRoot);
     if (bundlerType === 'classic') {
         // These packages seem to be required for the older Remix version
         // However, newer Vite version does not need them

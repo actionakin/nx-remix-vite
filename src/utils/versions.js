@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBunlderType = exports.getPackageVersion = exports.getRemixVersion = exports.testingLibraryUserEventsVersion = exports.testingLibraryJestDomVersion = exports.testingLibraryReactVersion = exports.tailwindVersion = exports.typescriptVersion = exports.eslintVersion = exports.typesReactDomVersion = exports.typesReactVersion = exports.reactDomVersion = exports.reactVersion = exports.isbotVersion = exports.remixVersion = exports.nxVersion = void 0;
-const path_1 = require("path");
+exports.getPackageVersion = exports.getRemixVersion = exports.testingLibraryUserEventsVersion = exports.testingLibraryJestDomVersion = exports.testingLibraryReactVersion = exports.tailwindVersion = exports.typescriptVersion = exports.eslintVersion = exports.typesReactDomVersion = exports.typesReactVersion = exports.reactDomVersion = exports.reactVersion = exports.isbotVersion = exports.remixVersion = exports.nxVersion = void 0;
 const devkit_1 = require("@nx/devkit");
-const fs_1 = require("fs");
 exports.nxVersion = require('../../package.json').version;
 exports.remixVersion = '^2.8.1';
 exports.isbotVersion = '^4.4.0';
@@ -28,11 +26,3 @@ function getPackageVersion(tree, packageName) {
         null);
 }
 exports.getPackageVersion = getPackageVersion;
-/**
- * Infer bundler type depending on vite.config.ts presence
- * @param root workspace root path
- */
-function getBunlderType(root) {
-    return (0, fs_1.existsSync)((0, path_1.join)(root, 'vite.config.ts')) ? 'vite' : 'classic';
-}
-exports.getBunlderType = getBunlderType;
