@@ -47,7 +47,8 @@
     "./executors.json": "./executors.json",
     "./generators.json": "./generators.json",
     "./migrations.json": "./migrations.json",
-    "./generators": "./generators.js"
+    "./generators": "./generators.js",
+    "./src/utils/versions": "./src/utils/versions.js",
   },
   "type": "commonjs"
 }
